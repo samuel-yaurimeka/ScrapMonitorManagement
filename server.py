@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from datetime import datetime
 from typing import List, Optional
 
 app = FastAPI(title="Ecommerce 2 API")
@@ -32,8 +31,6 @@ def get_processes():
 # 2. Agregar o actualizar un proceso
 @app.post("/processes")
 def update_process(item: ProcessItem):
-    # Generamos el timestamp en el servidor como pediste
-    item.last_update = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # Buscamos si ya existe el ID para actualizarlo, sino lo agregamos
     for idx, p in enumerate(db["processes"]):
@@ -50,6 +47,7 @@ def get_process(process_id: str):
     for p in db["processes"]:
         if p.id == process_id:
             return p
+
     raise HTTPException(status_code=404, detail="Proceso no encontrado")
 
 
